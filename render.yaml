@@ -1,0 +1,13 @@
+# Render Blueprint für "Mein inneres Team".
+# In Render: New → Blueprint → dieses Repo auswählen. Render liest diese Datei
+# und legt den Web-Service automatisch an.
+services:
+  - type: web
+    name: inneres-team
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"

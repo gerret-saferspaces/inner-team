@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { avatarStyle, initial } from "../visual.js";
 
 // Team-Übersicht, minimal: Liste der Namen, hinzufügen, entfernen.
 export default function Team({ parts, onAdd, onRemove }) {
@@ -14,12 +15,14 @@ export default function Team({ parts, onAdd, onRemove }) {
 
   return (
     <div className="screen">
-      <h2>Mein inneres Team</h2>
+      <p className="eyebrow">◍ Mein inneres Team</p>
+      <h2 className="display">{parts.length} {parts.length === 1 ? "Stimme" : "Stimmen"}</h2>
 
       <ul className="list">
-        {parts.map((p) => (
-          <li key={p.id}>
-            {p.name}
+        {parts.map((p, i) => (
+          <li key={p.id} style={{ animationDelay: `${i * 40}ms` }}>
+            <span className="avatar" style={avatarStyle(p.name)}>{initial(p.name)}</span>
+            <span className="pname">{p.name}</span>
             <button className="x" onClick={() => onRemove(p.id)} aria-label="Entfernen">
               ✕
             </button>
@@ -31,9 +34,9 @@ export default function Team({ parts, onAdd, onRemove }) {
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Weiterer Anteil …"
+          placeholder="Weitere Stimme …"
         />
-        <button className="btn" disabled={!name.trim()}>Hinzufügen</button>
+        <button className="btn" disabled={!name.trim()}>+</button>
       </form>
     </div>
   );

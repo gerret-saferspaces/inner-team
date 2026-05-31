@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { avatarStyle, initial } from "../visual.js";
 
 // Onboarding, radikal minimal: ein Schritt, eine Aktion.
 // 1) Begrüßung   2) Anteile (nur Namen) eintragen
@@ -11,12 +12,12 @@ export default function Onboarding({ onComplete }) {
     return (
       <div className="screen center">
         <span className="mark">◍</span>
-        <h1>Dein inneres Team</h1>
+        <h1 className="display">Dein inneres&nbsp;Team</h1>
         <p className="lead">
           In dir leben viele Stimmen. Lass uns sie aufschreiben – eine nach der
           anderen.
         </p>
-        <button className="btn" onClick={() => setStarted(true)}>
+        <button className="btn lg" onClick={() => setStarted(true)}>
           Los geht's
         </button>
       </div>
@@ -33,7 +34,7 @@ export default function Onboarding({ onComplete }) {
 
   return (
     <div className="screen">
-      <h2>Welche Anteile gehören zu dir?</h2>
+      <h2 className="display">Welche Stimmen<br />gehören zu dir?</h2>
 
       <form onSubmit={add} className="add-row">
         <input
@@ -42,18 +43,21 @@ export default function Onboarding({ onComplete }) {
           onChange={(e) => setName(e.target.value)}
           placeholder="z. B. Der Kritiker"
         />
-        <button className="btn" disabled={!name.trim()}>Hinzufügen</button>
+        <button className="btn" disabled={!name.trim()}>+</button>
       </form>
 
       <ul className="list">
-        {parts.map((p) => (
-          <li key={p.id}>{p.name}</li>
+        {parts.map((p, i) => (
+          <li key={p.id} style={{ animationDelay: `${i * 40}ms` }}>
+            <span className="avatar" style={avatarStyle(p.name)}>{initial(p.name)}</span>
+            <span className="pname">{p.name}</span>
+          </li>
         ))}
       </ul>
 
       {parts.length > 0 && (
         <button className="btn primary wide" onClick={() => onComplete(parts)}>
-          Fertig
+          Mein Team ist bereit →
         </button>
       )}
     </div>

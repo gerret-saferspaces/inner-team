@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Shell from "./Shell.jsx";
 import { avatarStyle, initial } from "../visual.js";
 
 // Team-Übersicht, minimal: Liste der Namen, hinzufügen, entfernen.
@@ -14,30 +15,33 @@ export default function Team({ parts, onAdd, onRemove }) {
   };
 
   return (
-    <div className="screen">
-      <p className="eyebrow">◍ Mein inneres Team</p>
-      <h2 className="display">{parts.length} {parts.length === 1 ? "Stimme" : "Stimmen"}</h2>
-
-      <ul className="list">
-        {parts.map((p, i) => (
-          <li key={p.id} style={{ animationDelay: `${i * 40}ms` }}>
-            <span className="avatar" style={avatarStyle(p.name)}>{initial(p.name)}</span>
-            <span className="pname">{p.name}</span>
-            <button className="x" onClick={() => onRemove(p.id)} aria-label="Entfernen">
-              ✕
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      <form onSubmit={add} className="add-row">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Weitere Stimme …"
-        />
-        <button className="btn" disabled={!name.trim()}>+</button>
-      </form>
-    </div>
+    <Shell
+      eyebrow="◍ Mein inneres Team"
+      title={`${parts.length} ${parts.length === 1 ? "Stimme" : "Stimmen"}`}
+      dock={
+        <form onSubmit={add} className="add-row">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Weitere Stimme …"
+          />
+          <button className="btn round" disabled={!name.trim()} aria-label="Hinzufügen">+</button>
+        </form>
+      }
+    >
+      {parts.length === 0 ? (
+        <p className="hint">Noch keine Stimmen. Füge unten die erste hinzu.</p>
+      ) : (
+        <ul className="list">
+          {parts.map((p, i) => (
+            <li key={p.id} style={{ animationDelay: `${i * 40}ms` }}>
+              <span className="avatar" style={avatarStyle(p.name)}>{initial(p.name)}</span>
+              <span className="pname">{p.name}</span>
+              <button className="x" onClick={() => onRemove(p.id)} aria-label="Entfernen">✕</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Shell>
   );
 }

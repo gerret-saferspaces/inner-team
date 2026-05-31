@@ -1,7 +1,8 @@
 import { useState } from "react";
+import Shell from "./Shell.jsx";
 import { avatarStyle, initial } from "../visual.js";
 
-// Onboarding, radikal minimal: ein Schritt, eine Aktion.
+// Onboarding, minimal: ein Schritt, eine Aktion.
 // 1) Begrüßung   2) Anteile (nur Namen) eintragen
 export default function Onboarding({ onComplete }) {
   const [started, setStarted] = useState(false);
@@ -12,7 +13,7 @@ export default function Onboarding({ onComplete }) {
     return (
       <div className="screen center">
         <span className="mark">◍</span>
-        <h1 className="display">Dein inneres&nbsp;Team</h1>
+        <h1 className="display">Dein inneres Team</h1>
         <p className="lead">
           In dir leben viele Stimmen. Lass uns sie aufschreiben – eine nach der
           anderen.
@@ -33,33 +34,40 @@ export default function Onboarding({ onComplete }) {
   };
 
   return (
-    <div className="screen">
-      <h2 className="display">Welche Stimmen<br />gehören zu dir?</h2>
-
-      <form onSubmit={add} className="add-row">
-        <input
-          autoFocus
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="z. B. Der Kritiker"
-        />
-        <button className="btn" disabled={!name.trim()}>+</button>
-      </form>
-
-      <ul className="list">
-        {parts.map((p, i) => (
-          <li key={p.id} style={{ animationDelay: `${i * 40}ms` }}>
-            <span className="avatar" style={avatarStyle(p.name)}>{initial(p.name)}</span>
-            <span className="pname">{p.name}</span>
-          </li>
-        ))}
-      </ul>
-
-      {parts.length > 0 && (
-        <button className="btn primary wide" onClick={() => onComplete(parts)}>
-          Mein Team ist bereit →
-        </button>
+    <Shell
+      eyebrow="Schritt für Schritt"
+      title="Welche Stimmen gehören zu dir?"
+      action={
+        parts.length > 0 && (
+          <button className="link-btn" onClick={() => onComplete(parts)}>
+            Fertig →
+          </button>
+        )
+      }
+      dock={
+        <form onSubmit={add} className="add-row">
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="z. B. Der Kritiker"
+          />
+          <button className="btn round" disabled={!name.trim()} aria-label="Hinzufügen">+</button>
+        </form>
+      }
+    >
+      {parts.length === 0 ? (
+        <p className="hint">Tippe unten den ersten Anteil ein.</p>
+      ) : (
+        <ul className="list">
+          {parts.map((p, i) => (
+            <li key={p.id} style={{ animationDelay: `${i * 40}ms` }}>
+              <span className="avatar" style={avatarStyle(p.name)}>{initial(p.name)}</span>
+              <span className="pname">{p.name}</span>
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+    </Shell>
   );
 }

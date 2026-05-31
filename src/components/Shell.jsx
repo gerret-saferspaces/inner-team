@@ -6,7 +6,7 @@ export default function Shell({ eyebrow, title, action, children, dock }) {
       <header className="app-header">
         <div className="app-title">
           {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-          <h2 className="display">{title}</h2>
+          {title && <h2 className="display">{title}</h2>}
         </div>
         {action}
       </header>

@@ -5,22 +5,20 @@ sichtbar machst – die verschiedenen Anteile in dir, die gleichzeitig existiere
 und bei Entscheidungen mal lauter, mal leiser sind (nach dem Modell des
 *Inneren Teams* von Friedemann Schulz von Thun).
 
-> **Wichtig:** Die App füllt **niemals** Anteile für dich vor. Du definierst im
-> Onboarding alle Stimmen selbst – Symbol, Bedürfnis, Angst, typischer Satz und
-> ob ein Anteil dich eher bremst (Blocker), weiterbringt (Helfer) oder neutral
-> ist.
+> **Wichtig:** Die App füllt **niemals** Anteile für dich vor. Du legst im
+> Onboarding alle Stimmen selbst an.
 
 ## Aktueller Stand (Minimalversion)
 
-- **Onboarding-first:** sehr cleanes, minimales Setup.
-  1. Begrüßung mit kurzer Erklärung des Konzepts.
-  2. **Anteile definieren** – du legst deine eigenen Stimmen an.
-  3. Übergang in die Team-Übersicht.
-- **Team-Übersicht:** alle selbst angelegten Anteile als Karten; jederzeit
-  hinzufügen, bearbeiten, entfernen.
-- **Installierbar als PWA** (Manifest + Service Worker, offline-fähig).
+Bewusst auf das Nötigste reduziert – ein Anteil ist erst mal nur ein **Name**.
 
-Konferenz- und Erkenntnis-Ansichten folgen als nächste Schritte.
+1. Begrüßung (eine Aktion: starten).
+2. **Anteile eintragen** – Name eingeben, hinzufügen, wiederholen.
+3. **Team-Übersicht** – Liste der Anteile, hinzufügen und entfernen.
+
+Installierbar als PWA (Manifest + Service Worker, offline-fähig). Mehr Details
+pro Anteil (Bedürfnis, Angst, Blocker/Helfer …) sowie Konferenz- und
+Erkenntnis-Ansichten folgen als nächste Schritte – nur wenn nötig.
 
 ## Datenhaltung
 

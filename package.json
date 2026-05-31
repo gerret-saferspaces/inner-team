@@ -1,17 +1,27 @@
 {
   "name": "inner-team",
-  "version": "0.1.0",
-  "description": "Mein inneres Team – eine kleine App, um die eigenen inneren Anteile zu erkennen, zu verstehen und zusammenzubringen.",
+  "version": "0.2.0",
+  "description": "Mein inneres Team – eine PWA, um die eigenen inneren Anteile selbst zu definieren, zu erkennen und zu verstehen.",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "icons": "node scripts/gen-icons.mjs",
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11",
+    "vite-plugin-pwa": "^0.21.1"
   },
   "license": "MIT"
 }

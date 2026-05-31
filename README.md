@@ -1,63 +1,66 @@
 # Mein inneres Team 🪑
 
-Eine kleine Web-App, mit der du dein **inneres Team** sichtbar machst – die
-verschiedenen Anteile in dir, die gleichzeitig existieren und bei
-Entscheidungen mal lauter, mal leiser sind (nach dem Modell des *Inneren Teams*
-von Friedemann Schulz von Thun).
+Eine **Progressive Web App** (React + Vite), mit der du dein **inneres Team**
+sichtbar machst – die verschiedenen Anteile in dir, die gleichzeitig existieren
+und bei Entscheidungen mal lauter, mal leiser sind (nach dem Modell des
+*Inneren Teams* von Friedemann Schulz von Thun).
 
-Ziel der App:
+> **Wichtig:** Die App füllt **niemals** Anteile für dich vor. Du definierst im
+> Onboarding alle Stimmen selbst – Symbol, Bedürfnis, Angst, typischer Satz und
+> ob ein Anteil dich eher bremst (Blocker), weiterbringt (Helfer) oder neutral
+> ist.
 
-- **Anteile erkennen** – nicht nur den inneren Kritiker, sondern auch ganz
-  eigene Charaktere benennen.
-- **Verstehen, wer du bist** – was jeder Anteil braucht, wovor er sich fürchtet,
-  was er typischerweise sagt.
-- **Blocker & Helfer identifizieren** – wer hält dich zurück, und welcher Anteil
-  könnte in einer Situation weiterhelfen?
+## Aktueller Stand (Minimalversion)
 
-## Die drei Bereiche
+- **Onboarding-first:** sehr cleanes, minimales Setup.
+  1. Begrüßung mit kurzer Erklärung des Konzepts.
+  2. **Anteile definieren** – du legst deine eigenen Stimmen an.
+  3. Übergang in die Team-Übersicht.
+- **Team-Übersicht:** alle selbst angelegten Anteile als Karten; jederzeit
+  hinzufügen, bearbeiten, entfernen.
+- **Installierbar als PWA** (Manifest + Service Worker, offline-fähig).
 
-| Bereich | Wofür |
-|---|---|
-| **Mein Team** | Anteile anlegen und beschreiben (Name, Symbol, Bedürfnis, Angst, typischer Satz, Wirkung als Blocker/Helfer/Neutral). |
-| **Innere Konferenz** | Eine konkrete Frage stellen und einstellen, wie laut sich jeder Anteil meldet, was er sagt – plus Reflexion zu Blocker, Helfer und nächstem Schritt. |
-| **Erkenntnisse** | Überblick: wer ist im Schnitt am lautesten, welche Blocker-/Helfer-Muster zeigen sich, das Team auf einen Blick. |
+Konferenz- und Erkenntnis-Ansichten folgen als nächste Schritte.
 
 ## Datenhaltung
 
-Für diese erste Version bleiben **alle Daten lokal im Browser** (`localStorage`).
-Es gibt keinen Account und keinen Server-Speicher. Über **Export/Import** (oben
-rechts) kannst du deine Daten als JSON-Datei sichern oder auf ein anderes Gerät
-übertragen.
+Alle Daten bleiben **lokal im Browser** (`localStorage`) – kein Account, kein
+Server-Speicher. Die Persistenz steckt hinter `src/storage.js` (`load()` /
+`save()`); für einen späteren Wechsel auf eine Datenbank werden dort nur die
+beiden Funktionen gegen API-Aufrufe getauscht. Der Express-Server bringt dafür
+bereits einen `/api/health`-Endpunkt mit.
 
-Die Persistenz steckt hinter einer kleinen `Storage`-Abstraktion in
-`public/app.js`. Wer später auf eine Datenbank wechseln will, tauscht dort
-`load()` / `save()` gegen API-Aufrufe – der Rest der App bleibt unverändert.
-Der Express-Server (`server.js`) bringt dafür bereits einen `/api/health`-Endpunkt
-und eine Stelle für künftige API-Routen mit.
-
-## Lokal starten
+## Entwicklung
 
 ```bash
 npm install
-npm start
-# → http://localhost:3000
+npm run dev      # Vite Dev-Server (Hot Reload)
+```
+
+Produktion lokal testen:
+
+```bash
+npm run build    # erzeugt dist/ inkl. Service Worker
+npm start        # Express serviert dist/ → http://localhost:3000
+```
+
+PWA-Icons neu generieren (reiner PNG-Encoder, ohne externe Tools):
+
+```bash
+npm run icons
 ```
 
 ## Auf Render deployen
 
 Das Repo enthält eine `render.yaml` (Blueprint):
 
-1. In Render **New → Blueprint** wählen und dieses Repository verbinden.
-2. Render erkennt den Web-Service automatisch (`npm install` / `npm start`).
-
-Alternativ als normaler Web-Service:
-
-- **Build Command:** `npm install`
-- **Start Command:** `npm start`
-- Render setzt `PORT` selbst; der Server liest ihn aus `process.env.PORT`.
+1. In Render **New → Blueprint** wählen, dieses Repo + Branch `main` verbinden.
+2. Render baut mit `npm install && npm run build` und startet mit `npm start`.
+3. `PORT` setzt Render selbst; der Server liest ihn aus `process.env.PORT`.
+   Health-Check läuft gegen `/api/health`.
 
 ## Tech
 
-Vanilla JS, keine Frameworks, kein Build-Schritt. Express dient nur dazu, die
-statischen Dateien auszuliefern und einen sauberen Deploy auf Render zu
-ermöglichen.
+- **React + Vite** (kein eigenes Setup-Boilerplate, schneller Dev-Server)
+- **vite-plugin-pwa** für Manifest + Service Worker
+- **Express** nur zum Ausliefern des Builds und als Anker für eine spätere API

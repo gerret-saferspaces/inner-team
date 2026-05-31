@@ -1,33 +1,37 @@
-// Minimal Express server for "Mein inneres Team".
+// Minimaler Express-Server für die gebaute PWA.
 //
-// For the MVP this only serves the static browser app. All data lives in the
-// browser (localStorage), so there is no backend storage yet. The /api/health
-// route and the structure here are kept deliberately small so that a real
-// persistence layer (e.g. a database + REST API) can be added later without
-// changing the deployment setup on Render.
+// Serviert das Vite-Build aus dist/. Die App ist eine reine Browser-PWA
+// (Daten in localStorage). Der /api/health-Endpunkt und diese Struktur bleiben
+// bewusst klein, damit später eine echte API/DB ergänzt werden kann, ohne den
+// Deploy auf Render zu verändern.
 
 import express from "express";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { existsSync } from "fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const DIST = join(__dirname, "dist");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Serve the browser app.
-app.use(express.static(join(__dirname, "public")));
-
-// Tiny health/readiness endpoint, handy for Render and future API checks.
 app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok", storage: "browser-localStorage", version: "0.1.0" });
+  res.json({ status: "ok", storage: "browser-localStorage", version: "0.2.0" });
 });
 
-// SPA fallback: always return the app shell.
+if (!existsSync(DIST)) {
+  console.warn("⚠  dist/ fehlt – bitte zuerst `npm run build` ausführen.");
+}
+
+// Gebaute PWA ausliefern.
+app.use(express.static(DIST));
+
+// SPA-Fallback: alle übrigen Routen liefern die App-Shell.
 app.get("*", (_req, res) => {
-  res.sendFile(join(__dirname, "public", "index.html"));
+  res.sendFile(join(DIST, "index.html"));
 });
 
 app.listen(PORT, () => {

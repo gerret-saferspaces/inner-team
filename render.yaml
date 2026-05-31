@@ -1,13 +1,13 @@
-# Render Blueprint für "Mein inneres Team".
-# In Render: New → Blueprint → dieses Repo auswählen. Render liest diese Datei
-# und legt den Web-Service automatisch an.
+# Render Blueprint für "Mein inneres Team" (Vite + React PWA).
+# In Render: New → Blueprint → dieses Repo + Branch main wählen.
 services:
   - type: web
     name: inneres-team
     runtime: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && npm run build
     startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
         value: "20"

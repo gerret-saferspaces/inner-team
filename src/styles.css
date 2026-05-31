@@ -8,17 +8,24 @@
 }
 
 * { box-sizing: border-box; }
-html, body, #root { height: 100%; }
+html, body, #root { min-height: 100%; }
 
 body {
   margin: 0;
+  min-height: 100dvh; /* echte Viewport-Höhe auf Mobile (Browser-Leisten) */
   font-family: "Inter", system-ui, sans-serif;
   color: var(--ink);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%; /* kein Auto-Zoom der Schrift auf iOS */
+  -webkit-tap-highlight-color: transparent; /* kein graues Blinken beim Tippen */
   background: #f4f1fb;
   overflow-x: hidden;
+  overscroll-behavior-y: none; /* kein Gummiband-Overscroll in der PWA */
 }
+
+button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 
 /* ---------- lebendiger Hintergrund ---------- */
 body::before,
@@ -64,10 +71,13 @@ h1, h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; }
 .screen {
   max-width: 460px;
   margin: 0 auto;
-  padding: 56px 24px 72px;
+  /* Safe-Area: Notch / Home-Indikator berücksichtigen */
+  padding:
+    calc(48px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right))
+    calc(56px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
 }
 .screen.center {
-  min-height: 100%;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -188,4 +198,31 @@ h2.display { font-size: 32px; margin: 0 0 26px; line-height: 1.1; }
   border-radius: 8px;
   transition: all 0.15s ease;
 }
+.x {
+  /* größeres Touch-Ziel auf dem Handy */
+  min-width: 40px;
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+}
 .x:hover { color: var(--accent-2); background: rgba(240, 116, 106, 0.12); }
+
+/* ---------- kleine Screens ---------- */
+@media (max-width: 420px) {
+  .screen { padding-top: calc(36px + env(safe-area-inset-top)); }
+  h1.display { font-size: 34px; }
+  h2.display { font-size: 28px; }
+  .lead { font-size: 16px; }
+  .mark { font-size: 52px; }
+}
+
+/* Desktop-Hover-Effekte nur dort, wo es wirklich einen Hover gibt */
+@media (hover: none) {
+  .btn:hover { transform: none; box-shadow: 0 8px 20px rgba(124, 108, 240, 0.35); }
+  .x:hover { background: transparent; color: #b3acc6; }
+}
+
+/* Animationen respektieren Nutzer-Einstellung */
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after, .mark, .list li { animation: none; }
+}
